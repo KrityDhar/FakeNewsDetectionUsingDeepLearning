@@ -22,8 +22,8 @@ pip install numpy pandas tensorflow scikit-learn imbalanced-learn matplotlib sea
 
 2️⃣ Clone the Repository
 
-git clone https://github.com/yourusername/fake-news-detection.git
-cd fake-news-detection
+git clone https://github.com/KrityDhar/FakeNewsDetectionUsingDeepLearning.git
+cd FakeNewsDetectionUsingDeepLearning
 
 3️⃣ Dataset Placement
 
