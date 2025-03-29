@@ -13,40 +13,38 @@ from sklearn.metrics import accuracy_score, classification_report, confusion_mat
 from imblearn.over_sampling import SMOTE
 import os
 
-# ---------------------- Verify File Path ---------------------- #
+
 directory = "/content/drive/MyDrive/fakenews"
 print("Files in directory:", os.listdir(directory))
 
-# ---------------------- Load Dataset ---------------------- #
+
 authentic_path = f"{directory}/LabeledAuthentic-7K.csv"
 fake_path = f"{directory}/LabeledFake-1K.csv"
 
 df_authentic = pd.read_csv(authentic_path)
 df_fake = pd.read_csv(fake_path)
 
-df_authentic['label'] = 1  # Authentic news = 1
-df_fake['label'] = 0  # Fake news = 0
-
+df_authentic['label'] = 1  
+df_fake['label'] = 0  
 df = pd.concat([df_authentic, df_fake], ignore_index=True)
 df['text'] = df['headline'].fillna('') + ' ' + df['content'].fillna('')
 
-# ---------------------- Text Cleaning Function ---------------------- #
 def clean_text(text):
-    text = re.sub(r'[^\w\s]', ' ', str(text))  # Remove special characters except spaces
+    text = re.sub(r'[^\w\s]', ' ', str(text))  
     text = text.lower()
     return text
 
 df['text'] = df['text'].apply(clean_text)
 df = df[df['text'].str.strip() != '']
 
-# ---------------------- Tokenization ---------------------- #
+
 tokenizer = Tokenizer()
 tokenizer.fit_on_texts(df['text'])
 X = tokenizer.texts_to_sequences(df['text'])
 X = pad_sequences(X, maxlen=100)
 y = df['label'].values
 
-# ---------------------- Handle Data Imbalance (SMOTE) ---------------------- #
+
 print("\nApplying SMOTE to balance the dataset...")
 smote = SMOTE(random_state=42)
 X_resampled, y_resampled = smote.fit_resample(X, y)
@@ -54,7 +52,7 @@ X_resampled, y_resampled = smote.fit_resample(X, y)
 print("Resampled dataset shape:", np.bincount(y_resampled))
 X_train, X_test, y_train, y_test = train_test_split(X_resampled, y_resampled, test_size=0.2, random_state=42)
 
-# ---------------------- Load Pre-trained Embeddings (if available) ---------------------- #
+
 embedding_dim = 300
 embedding_path = os.path.join(directory, "cc.bn.300.vec")
 embedding_index = {}
@@ -99,13 +97,13 @@ model = Sequential([
 
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-# ---------------------- Train Model ---------------------- #
+
 print("\nTraining Model...")
 history = model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=5, batch_size=32)
 
-# ---------------------- Get Predictions ---------------------- #
-y_pred_prob = model.predict(X_test).flatten()  # Ensure predictions are in 1D format
-y_pred = (y_pred_prob >= 0.5).astype(int)  # Apply threshold (default 0.5)
+
+y_pred_prob = model.predict(X_test).flatten()  
+y_pred = (y_pred_prob >= 0.5).astype(int)  
 
 
 accuracy = accuracy_score(y_test, y_pred)
@@ -154,7 +152,7 @@ def predict_fake_news(text):
     prediction = model.predict(padded)[0][0]
     return "Authentic News" if prediction > 0.5 else "Fake News"
 
-# ---------------------- Example Prediction ---------------------- #
+
 example_text = "বাংলাদেশের প্রধানমন্ত্রী আজ নতুন প্রকল্প ঘোষণা করেছেন।"
 example_prediction = predict_fake_news(example_text)
 print("\nExample Prediction:", example_text, "->", example_prediction)
