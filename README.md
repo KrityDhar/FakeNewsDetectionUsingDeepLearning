@@ -12,8 +12,8 @@ Pre-trained Word Embeddings: Option to use Bengali FastText embeddings (cc.bn.30
 BiLSTM Model: A deep learning model for classification.
 Evaluation Metrics: Reports accuracy, precision, recall, F1-score, confusion matrix, and ROC-AUC curve.
 
-**Setup Instructions
-**
+**Setup Instructions**
+
 1️⃣ Prerequisites
 
 Ensure you have Python installed (recommended: Python 3.8+). Install the required dependencies using:
@@ -51,8 +51,8 @@ text = "বাংলাদেশের প্রধানমন্ত্রী �
 prediction = predict_fake_news(text)
 print("Prediction:", prediction)
 
-**Model Performance
-**
+**Model Performance**
+
 After training, the model reports the following evaluation metrics:
 
 Accuracy: ~ 91.25%
@@ -61,6 +61,6 @@ Recall: ~ 90.73%
 F1 Score: ~ 91.11%
 ROC-AUC Score: ~ 97.25%
 
-**Acknowledgements
-**
+**Acknowledgements**
+
 This project is developed as part of Deep Learning course under the supervision of Md. Mynoddin at Rangamati Science and Technology University.
